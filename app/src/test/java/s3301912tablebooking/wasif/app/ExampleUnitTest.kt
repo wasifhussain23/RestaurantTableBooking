@@ -1,4 +1,4 @@
-package com.example.restauranttablebooking
+package s3301912tablebooking.wasif.app
 
 import org.junit.Test
 

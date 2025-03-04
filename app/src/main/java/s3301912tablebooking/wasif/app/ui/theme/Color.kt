@@ -1,4 +1,4 @@
-package com.example.restauranttablebooking.ui.theme
+package s3301912tablebooking.wasif.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

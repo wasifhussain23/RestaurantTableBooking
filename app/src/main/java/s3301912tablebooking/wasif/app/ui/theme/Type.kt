@@ -1,4 +1,4 @@
-package com.example.restauranttablebooking.ui.theme
+package s3301912tablebooking.wasif.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

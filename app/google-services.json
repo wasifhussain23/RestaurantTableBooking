@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1025531710121",
+    "project_id": "restauranttablebooking-1bdcf",
+    "storage_bucket": "restauranttablebooking-1bdcf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025531710121:android:3db8bf0415f4bb8290b7b8",
+        "android_client_info": {
+          "package_name": "s3301912tablebooking.wasif.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1aLEAGJzu6Xx6BFeUGU3aSUCt285KNcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

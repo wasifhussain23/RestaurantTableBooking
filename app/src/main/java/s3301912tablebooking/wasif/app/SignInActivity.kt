@@ -1,12 +1,12 @@
-package com.example.restauranttablebooking
+package s3301912tablebooking.wasif.app
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -39,20 +39,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.database.FirebaseDatabase
 
-class SIgnUpActivity : ComponentActivity() {
+class SignInActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SignUpScreen()
+            SignInScreen()
         }
     }
 }
 
 @Composable
-fun SignUpScreen() {
+fun SignInScreen() {
 
     var guestBookingMail by remember { mutableStateOf("") }
     var guestBookingPassword by remember { mutableStateOf("") }
@@ -102,31 +101,6 @@ fun SignUpScreen() {
                     .padding(horizontal = 12.dp),
                 value = guestBookingMail,
                 onValueChange = { guestBookingMail = it },
-                label = { Text("Enter Name") },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(32.dp),
-                trailingIcon = {
-                    Image(
-                        modifier = Modifier.size(36.dp),
-                        painter = painterResource(id = R.drawable.ic_name), // Replace with your actual drawable resource
-                        contentDescription = "Name Icon"
-                    )
-
-                }
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
-                value = guestBookingMail,
-                onValueChange = { guestBookingMail = it },
                 label = { Text("Enter Email") },
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.White,
@@ -144,31 +118,6 @@ fun SignUpScreen() {
             )
 
             Spacer(modifier = Modifier.height(6.dp))
-
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
-                value = guestBookingMail,
-                onValueChange = { guestBookingMail = it },
-                label = { Text("Enter Place") },
-                colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                ),
-                shape = RoundedCornerShape(32.dp),
-                trailingIcon = {
-                    Image(
-                        modifier = Modifier.size(36.dp),
-                        painter = painterResource(id = R.drawable.ic_place), // Replace with your actual drawable resource
-                        contentDescription = "Place Icon"
-                    )
-
-                }
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
 
             OutlinedTextField(
                 modifier = Modifier
@@ -198,6 +147,34 @@ fun SignUpScreen() {
 
                 Text(
                     modifier = Modifier
+                        .clickable {
+                            when{
+
+
+                                guestBookingMail.isBlank() -> {
+                                    Toast.makeText(context, "MailID missing", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                                guestBookingPassword.isBlank() -> {
+                                    Toast.makeText(context, "Password missing", Toast.LENGTH_SHORT)
+                                        .show()
+
+                                }
+                                else -> {
+
+                                    val restaurantData = RestaurantData(
+                                        "",
+                                        guestBookingMail,
+                                        "",
+                                        guestBookingPassword
+
+                                    )
+
+                                    loginQuiz(restaurantData, context)
+
+                                }
+                            }
+                        }
                         .padding(start = 24.dp)
                         .background(
                             color = colorResource(id = R.color.white),
@@ -209,7 +186,7 @@ fun SignUpScreen() {
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(vertical = 6.dp, horizontal = 12.dp),
-                    text = "SignUp",
+                    text = "SignIn",
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = colorResource(id = R.color.firsthome_color),
@@ -222,10 +199,10 @@ fun SignUpScreen() {
                     modifier = Modifier
                         .padding(vertical = 6.dp, horizontal = 24.dp)
                         .clickable {
-                            context.startActivity(Intent(context, SignInActivity::class.java))
+                            context.startActivity(Intent(context, SIgnUpActivity::class.java))
                             context.finish()
                         },
-                    text = "SignIn To My Account",
+                    text = "Signup For An Account",
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = Color.Black,
@@ -252,8 +229,45 @@ fun SignUpScreen() {
 
 }
 
+fun loginQuiz(restaurantData :RestaurantData, context: Context) {
+
+
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val databaseReference = firebaseDatabase.getReference("TableBookingDetails").child(restaurantData.emailId.replace(".", ","))
+
+    databaseReference.get().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val tableData = task.result?.getValue(RestaurantData::class.java)
+            if (tableData != null) {
+                if (tableData.password == restaurantData.password) {
+                    Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+                    TableBookingSP.persistLoginState(context, true)
+                    TableBookingSP.persistUserMail(context, tableData.emailId)
+                    TableBookingSP.persistUserName(context, tableData.userName)
+                    Toast.makeText(context, "Login Sucessfully", Toast.LENGTH_SHORT).show()
+
+//                    context.startActivity(Intent(context, HomeActivity::class.java))
+//                    (context as Activity).finish()
+                } else {
+                    Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(context, "Your account not found", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(
+                context,
+                "Something went wrong",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
-fun SignUpScreenPreview() {
-    SignUpScreen()
+fun SignInScreenPreview() {
+    SignInScreen()
 }
