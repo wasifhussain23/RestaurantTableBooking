@@ -1,6 +1,10 @@
 package s3301912tablebooking.wasif.app
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
@@ -19,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,9 +32,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class BookingHomeActivity : AppCompatActivity() {
+class BookingHomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContent {
+            BookingHomeActivityScreen()
+        }
     }
 }
 
@@ -75,6 +83,8 @@ fun BookingHomeActivityScreen() {
 
 @Composable
 fun BookingOptions() {
+    val context = LocalContext.current as Activity
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +92,9 @@ fun BookingOptions() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BookingButton(text = "Book a Table") { /* Handle click */ }
+        BookingButton(text = "Book a Table") {
+            context.startActivity(Intent(context, BookTableActivity::class.java))
+        }
         BookingButton(text = "Manage your bookings") { /* Handle click */ }
         BookingButton(text = "User Profile") { /* Handle click */ }
     }

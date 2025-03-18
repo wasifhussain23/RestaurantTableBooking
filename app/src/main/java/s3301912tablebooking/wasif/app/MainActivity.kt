@@ -63,8 +63,18 @@ fun BookingLaunchCheck()
         BookingLaunch()
 
     } else {
-        context.startActivity(Intent(context, SignInActivity::class.java))
-        context.finish()
+
+        val loginStatus = TableBookingSP.fetchLoginState(context)
+
+        if(loginStatus)
+        {
+            context.startActivity(Intent(context, BookingHomeActivity::class.java))
+            context.finish()
+        }else{
+            context.startActivity(Intent(context, SignInActivity::class.java))
+            context.finish()
+        }
+
     }
 
 }

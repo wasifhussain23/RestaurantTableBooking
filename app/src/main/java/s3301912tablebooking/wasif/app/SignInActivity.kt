@@ -244,10 +244,9 @@ fun loginQuiz(restaurantData :RestaurantData, context: Context) {
                     TableBookingSP.persistLoginState(context, true)
                     TableBookingSP.persistUserMail(context, tableData.emailId)
                     TableBookingSP.persistUserName(context, tableData.userName)
-                    Toast.makeText(context, "Login Sucessfully", Toast.LENGTH_SHORT).show()
 
-//                    context.startActivity(Intent(context, HomeActivity::class.java))
-//                    (context as Activity).finish()
+                    context.startActivity(Intent(context, BookingHomeActivity::class.java))
+                    (context as Activity).finish()
                 } else {
                     Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT).show()
                 }

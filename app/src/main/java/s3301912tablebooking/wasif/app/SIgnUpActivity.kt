@@ -304,8 +304,8 @@ fun registerTableBooking(restaurantData: RestaurantData, context: Context) {
             if (task.isSuccessful) {
                 Toast.makeText(context, "You Registered Successfully", Toast.LENGTH_SHORT)
                     .show()
-//                context.startActivity(Intent(context, CheckInActivity::class.java))
-//                (context as Activity).finish()
+                context.startActivity(Intent(context, SignInActivity::class.java))
+                (context as Activity).finish()
 
             } else {
                 Toast.makeText(
