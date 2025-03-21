@@ -3,7 +3,7 @@ package s3301912tablebooking.wasif.app
 import android.content.Context
 
 
-object TableBookingSP {
+object CustomerPreferences {
 
     fun persistLoginState(context: Context, value: Boolean) {
         val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)

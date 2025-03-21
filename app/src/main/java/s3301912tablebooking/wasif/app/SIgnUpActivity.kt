@@ -203,24 +203,24 @@ fun SignUpScreen() {
                         .clickable {
                             when {
 
-                                guestBookingUserName.isBlank() -> {
-                                    Toast.makeText(context, "UserName missing", Toast.LENGTH_SHORT)
+                                guestBookingUserName.isEmpty() -> {
+                                    Toast.makeText(context, "Enter UserName", Toast.LENGTH_SHORT)
                                         .show()
 
                                 }
 
-                                guestBookingMail.isBlank() -> {
-                                    Toast.makeText(context, "EmailId missing", Toast.LENGTH_SHORT)
+                                guestBookingMail.isEmpty() -> {
+                                    Toast.makeText(context, "Enter MailId", Toast.LENGTH_SHORT)
                                         .show()
                                 }
 
-                                guestBookingPlace.isBlank() -> {
-                                    Toast.makeText(context, "Place missing", Toast.LENGTH_SHORT)
+                                guestBookingPlace.isEmpty() -> {
+                                    Toast.makeText(context, "Enter Place", Toast.LENGTH_SHORT)
                                         .show()
                                 }
 
-                                guestBookingPassword.isBlank() -> {
-                                    Toast.makeText(context, "Password missing", Toast.LENGTH_SHORT)
+                                guestBookingPassword.isEmpty() -> {
+                                    Toast.makeText(context, "Enter Password", Toast.LENGTH_SHORT)
                                         .show()
                                 }
 

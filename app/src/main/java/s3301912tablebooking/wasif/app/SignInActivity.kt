@@ -151,12 +151,12 @@ fun SignInScreen() {
                             when{
 
 
-                                guestBookingMail.isBlank() -> {
-                                    Toast.makeText(context, "MailID missing", Toast.LENGTH_SHORT)
+                                guestBookingMail.isEmpty() -> {
+                                    Toast.makeText(context, "Enter MailId", Toast.LENGTH_SHORT)
                                         .show()
                                 }
-                                guestBookingPassword.isBlank() -> {
-                                    Toast.makeText(context, "Password missing", Toast.LENGTH_SHORT)
+                                guestBookingPassword.isEmpty() -> {
+                                    Toast.makeText(context, "Enter Password", Toast.LENGTH_SHORT)
                                         .show()
 
                                 }
@@ -170,7 +170,7 @@ fun SignInScreen() {
 
                                     )
 
-                                    loginQuiz(restaurantData, context)
+                                    signUpCustomer(restaurantData, context)
 
                                 }
                             }
@@ -229,7 +229,7 @@ fun SignInScreen() {
 
 }
 
-fun loginQuiz(restaurantData :RestaurantData, context: Context) {
+fun signUpCustomer(restaurantData :RestaurantData, context: Context) {
 
 
     val firebaseDatabase = FirebaseDatabase.getInstance()
@@ -241,9 +241,9 @@ fun loginQuiz(restaurantData :RestaurantData, context: Context) {
             if (tableData != null) {
                 if (tableData.password == restaurantData.password) {
                     Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
-                    TableBookingSP.persistLoginState(context, true)
-                    TableBookingSP.persistUserMail(context, tableData.emailId)
-                    TableBookingSP.persistUserName(context, tableData.userName)
+                    CustomerPreferences.persistLoginState(context, true)
+                    CustomerPreferences.persistUserMail(context, tableData.emailId)
+                    CustomerPreferences.persistUserName(context, tableData.userName)
 
                     context.startActivity(Intent(context, BookingHomeActivity::class.java))
                     (context as Activity).finish()

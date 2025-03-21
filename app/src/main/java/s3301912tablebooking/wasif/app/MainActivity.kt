@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,13 +41,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BookingLaunchCheck()
+            BookingLaunchCheck(::customerStatusandGo)
         }
+    }
+    private fun customerStatusandGo(studentStatus: Int) {
+        if (studentStatus == 2) {
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }else{
+            startActivity(Intent(this, BookingHomeActivity::class.java))
+            finish()
+        }
+
     }
 }
 
 @Composable
-fun BookingLaunchCheck()
+fun BookingLaunchCheck(onLoginClick: (studentStatus: Int) -> Unit) {
+    val context = LocalContext.current
+
+    SideEffect {
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(3000)
+            onLoginClick(if (CustomerPreferences.fetchLoginState(context)) 1 else 2)
+        }
+    }
+
+    BookingLaunch()
+}
+
+@Composable
+fun BookingLaunchCheckOld()
 {
     val context = LocalContext.current as Activity
     var showSplash by remember { mutableStateOf(true) }
@@ -64,7 +89,7 @@ fun BookingLaunchCheck()
 
     } else {
 
-        val loginStatus = TableBookingSP.fetchLoginState(context)
+        val loginStatus = CustomerPreferences.fetchLoginState(context)
 
         if(loginStatus)
         {
