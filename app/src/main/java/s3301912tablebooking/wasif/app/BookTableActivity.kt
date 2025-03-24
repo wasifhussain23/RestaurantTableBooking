@@ -3,6 +3,7 @@ package s3301912tablebooking.wasif.app
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -16,20 +17,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -56,6 +63,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import s3301912tablebooking.wasif.app.SelectedRestaurant.restaurantData
 import java.util.Calendar
 
 
@@ -163,11 +171,120 @@ fun TableBookingScreen() {
 
 
         Column(
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+
         ) {
 
-
             Spacer(modifier = Modifier.height(16.dp))
+
+
+//            Card(
+//                modifier = Modifier.fillMaxWidth(),
+//                shape = RoundedCornerShape(12.dp),
+//                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+//                colors = CardDefaults.cardColors(containerColor = Color.White)
+//            ) {
+//
+//                Column(
+//                    modifier = Modifier.fillMaxWidth()
+//                ) {
+//                    Text(
+//                        modifier = Modifier.padding(start = 12.dp),
+//                        text = restaurantData.name, fontSize = 24.sp, fontWeight = FontWeight.Bold
+//                    )
+//                    Row(
+//                        modifier = Modifier.padding(horizontal = 8.dp),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Image(
+//                            modifier = Modifier
+//                                .height(24.dp),
+//                            painter = painterResource(id = R.drawable.iv_special_dish),
+//                            contentDescription = "ThumbNail"
+//                        )
+//                        Spacer(modifier = Modifier.width(8.dp))
+//
+//                        Text(text = restaurantData.specials, fontSize = 18.sp)
+//
+////                        Spacer(modifier = Modifier.weight(1f))
+//
+//
+//                    }
+//
+//                    Row(
+//                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Image(
+//                            modifier = Modifier
+//                                .height(24.dp),
+//                            painter = painterResource(id = R.drawable.iv_location),
+//                            contentDescription = "ThumbNail"
+//                        )
+//                        Spacer(modifier = Modifier.width(8.dp))
+//
+//                        Text(text = restaurantData.address, fontSize = 16.sp)
+//
+//
+//                    }
+//
+//                    Row(
+//                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .clickable {
+//                                    context.startActivity(Intent(context, MenuActivity::class.java))
+//
+//                                }
+//                                .background(
+//                                    color = colorResource(id = R.color.black),
+//                                    shape = RoundedCornerShape(6.dp)
+//                                )
+//                                .padding(horizontal = 6.dp, vertical = 4.dp),
+//                            text = "See Menu",
+//                            color = Color.White,
+//                            textAlign = TextAlign.Center,
+//                            fontSize = 16.sp
+//                        )
+//
+//                        Spacer(modifier = Modifier.width(12.dp))
+//
+//                        Text(
+//                            modifier = Modifier
+//                                .weight(1f)
+//                                .clickable {
+//                                    context.startActivity(
+//                                        Intent(
+//                                            context,
+//                                            LocateRestaurantActivity::class.java
+//                                        )
+//                                    )
+//
+//                                }
+//                                .background(
+//                                    color = colorResource(id = R.color.firsthome_color),
+//                                    shape = RoundedCornerShape(6.dp)
+//                                )
+//                                .padding(horizontal = 6.dp, vertical = 4.dp),
+//                            text = "View Location",
+//                            textAlign = TextAlign.Center,
+//                            color = Color.White,
+//                            fontSize = 16.sp
+//                        )
+//                    }
+//
+//
+//                }
+//            }
+//
+//            Spacer(modifier = Modifier.height(8.dp))
+
 
             OutlinedTextField(
                 value = name,
@@ -234,37 +351,6 @@ fun TableBookingScreen() {
                     )
                 }
 
-//                Spacer(modifier = Modifier.width(16.dp))
-
-//                Box(
-//                    modifier = Modifier
-//                        .weight(1f)
-//                        .padding(vertical = 8.dp)
-//                        .height(50.dp)
-//                        .clickable {
-//                            // Handle the click event, e.g., show a date picker
-//                        }
-//                        .background(Color.LightGray, MaterialTheme.shapes.medium)
-//                        .padding(horizontal = 16.dp),
-//                    contentAlignment = Alignment.CenterStart
-//                ) {
-//                    Text(
-//                        text = selectedTime.ifEmpty { "Select Time" },
-//                        color = if (selectedTime.isEmpty()) Color.Gray else Color.Black
-//                    )
-//                    Icon(
-//                        imageVector = Icons.Default.DateRange, // Replace with your desired icon
-//                        contentDescription = "Calendar Icon",
-//                        modifier = Modifier
-//                            .align(Alignment.CenterEnd)
-//                            .size(24.dp)
-//                            .clickable {
-//                                timePickerDialog.show()
-//                            },
-//                        tint = Color.DarkGray
-//                    )
-//                }
-
             }
 
             Text(
@@ -276,28 +362,30 @@ fun TableBookingScreen() {
 
             Spacer(modifier = Modifier.height(8.dp))
             //time slots
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(3), // 3 columns in each row
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(timeSlots.size) { slot ->
-                    TimeSlotItem(
-                        timeSlot = timeSlots[slot],
-                        isSelected = timeSlots[slot] == selectedSlot,
-                        onClick = {
-                            selectedSlot = timeSlots[slot]
-//                            onSlotSelected(slot)
-                        }
-                    )
+            Box(modifier = Modifier.weight(1f)) {
+
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3), // 3 columns in each row
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(timeSlots.size) { slot ->
+                        TimeSlotItem(
+                            timeSlot = timeSlots[slot],
+                            isSelected = timeSlots[slot] == selectedSlot,
+                            onClick = {
+                                selectedSlot = timeSlots[slot]
+                            }
+                        )
+                    }
                 }
+
             }
 
 
-//            SeatBookingScreen()
             Text(
                 text = "Select Your Table",
                 fontSize = 20.sp,
@@ -317,19 +405,23 @@ fun TableBookingScreen() {
                 )
             }
 
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-//                .verticalScroll(rememberScrollState())  // Enables scrolling if needed
-            ) {
-                items(rows) { row ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        for (col in 0 until columns) {
-                            val tableNumber = (row * columns) + col + 1
-                            val isSelected = tableNumber in selectedTables
+//                .weight(1f)
+
+            Box(modifier = Modifier.weight(1f)) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxHeight()
+
+
+                ) {
+                    items(rows) { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            for (col in 0 until columns) {
+                                val tableNumber = (row * columns) + col + 1
+                                val isSelected = tableNumber in selectedTables
 
                                 Box(
                                     modifier = Modifier
@@ -374,9 +466,10 @@ fun TableBookingScreen() {
                                     )
                                 }
 
+                            }
                         }
+                        Spacer(modifier = Modifier.height(10.dp))
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
 
@@ -414,6 +507,7 @@ fun TableBookingScreen() {
             ) {
                 Text("Book Table")
             }
+
         }
     }
 }

@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.maps.model.LatLng
 
 class BookingHomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,24 +173,24 @@ fun RestaurantItem(restaurantData: RestaurantItemData) {
 
                 Text(text = restaurantData.specials, fontSize = 18.sp)
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    modifier = Modifier
-                        .clickable {
-                            SelectedRestaurant.restaurantData = restaurantData
-                            context.startActivity(Intent(context, MenuActivity::class.java))
-
-                        }
-                        .background(
-                            color = colorResource(id = R.color.black),
-                            shape = RoundedCornerShape(6.dp)
-                        )
-                        .padding(horizontal = 6.dp, vertical = 4.dp),
-                    text = "See Menu",
-                    color = Color.White,
-                    fontSize = 16.sp
-                )
+//                Spacer(modifier = Modifier.weight(1f))
+//
+//                Text(
+//                    modifier = Modifier
+//                        .clickable {
+//                            SelectedRestaurant.restaurantData = restaurantData
+//                            context.startActivity(Intent(context, MenuActivity::class.java))
+//
+//                        }
+//                        .background(
+//                            color = colorResource(id = R.color.black),
+//                            shape = RoundedCornerShape(6.dp)
+//                        )
+//                        .padding(horizontal = 6.dp, vertical = 4.dp),
+//                    text = "See Menu",
+//                    color = Color.White,
+//                    fontSize = 16.sp
+//                )
 
             }
 
@@ -213,7 +214,12 @@ fun RestaurantItem(restaurantData: RestaurantItemData) {
                     modifier = Modifier
                         .clickable {
                             SelectedRestaurant.restaurantData = restaurantData
-                            context.startActivity(Intent(context, BookTableActivity::class.java))
+                            context.startActivity(
+                                Intent(
+                                    context,
+                                    RestaurantDetailsActivity::class.java
+                                )
+                            )
 
                         }
                         .background(
@@ -237,18 +243,69 @@ data class RestaurantItemData(
     var name: String = "",
     var profilePic: Int = 0,
     var specials: String = "",
-    var address: String = "UK,Tessidee"
+    var address: String = "UK,Tessidee",
+    var phone: String = "+1 490 423 234",
+    var description: String = "You have registered for Hackerearth Machine Learning Challenge: World Water Day currently happening on HackerEarth. Hackerearth Machine Learning Challenge: World Water Day is a rated contest that helps you to increase your HackerEarth rating and stand up among your peers.",
+    var location: LatLng = LatLng(54.5706759, -1.2329553),
+    var menuItems: List<MenuItem> = emptyList()
+)
+
+data class MenuItem(
+    var itemName: String = "",
+    var price: String = "",
+    var isPopular: Boolean = false,
+    var offer: String = "",
+    var imageUrl: Int = R.drawable.dish
 )
 
 object SelectedRestaurant {
     var restaurantData = RestaurantItemData()
 }
 
-fun getRestaurants(): List<RestaurantItemData>
-{
+fun getRestaurants(): List<RestaurantItemData> {
     return listOf(
-        RestaurantItemData(1,"Naatu", R.drawable.rest1, "Chicken Biryani", "United Kingdom"),
-        RestaurantItemData(2,"Naatu2", R.drawable.rest1, "Chicken Biryani", "United Kingdom"),
-        RestaurantItemData(3,"Naatu3", R.drawable.rest1, "Chicken Biryani", "United Kingdom")
+        RestaurantItemData(
+            1,
+            "Naatu 1",
+            R.drawable.rest1,
+            "Chicken Biryani",
+            "United Kingdom",
+            "+1 9097 908 879",
+            "Description",
+            LatLng(54.5145285,-1.4304957),
+            listOf(
+                MenuItem("Thai Pawn Cracker","2.50",true,"0"),
+                MenuItem("Apple Juice","119",false,"0")
+
+            )
+        ),
+        RestaurantItemData(
+            2,
+            "Naatu 2",
+            R.drawable.rest1,
+            "Chicken Biryani",
+            "United Kingdom",
+            "+1 9097 908 879",
+            "Description",
+            LatLng(54.5706759, -1.2329553),
+            listOf(
+                MenuItem("Sambar Rice","149",true,"0"),
+                MenuItem("Mutton Dalcha","149",true,"0")
+            )
+        ),
+        RestaurantItemData(
+            3,
+            "Naatu 3",
+            R.drawable.rest1,
+            "Chicken Biryani",
+            "United Kingdom",
+            "+1 9097 908 879",
+            "Description",
+            LatLng(54.5706759, -1.2329553),
+            listOf(
+                MenuItem("Apple MilkShake","149",true,"0")
+            )
+        )
+
     )
 }

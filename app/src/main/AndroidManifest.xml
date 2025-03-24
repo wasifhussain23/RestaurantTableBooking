@@ -13,6 +13,12 @@
         android:theme="@style/Theme.RestaurantTableBooking"
         tools:targetApi="31">
         <activity
+            android:name=".RestaurantDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LocateRestaurantActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuActivity"
             android:exported="false" />
         <activity
@@ -41,6 +47,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBbjh-tqqnt6bChHRv8ZI9wY0R9w5Z_MSI" />
     </application>
 
 </manifest>

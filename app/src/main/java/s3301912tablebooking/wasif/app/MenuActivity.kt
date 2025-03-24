@@ -47,14 +47,7 @@ class MenuActivity : ComponentActivity() {
 
 @Composable
 fun RestaurantMenuScreen() {
-    val menuItems = listOf(
-        MenuItemData("Pizza", R.drawable.dish, 299.0),
-        MenuItemData("Burger", R.drawable.dish, 199.0),
-        MenuItemData("Pasta", R.drawable.dish, 249.0),
-        MenuItemData("Salad", R.drawable.dish, 149.0),
-        MenuItemData("Sushi", R.drawable.dish, 399.0),
-        MenuItemData("Tacos", R.drawable.dish, 179.0)
-    )
+    val menuItems = SelectedRestaurant.restaurantData.menuItems
 
     val context = LocalContext.current as Activity
 
@@ -97,7 +90,9 @@ fun RestaurantMenuScreen() {
         }
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp)
         ) {
 
             LazyVerticalGrid(
@@ -116,7 +111,7 @@ fun RestaurantMenuScreen() {
 }
 
 @Composable
-fun MenuItemCard(menuItem: MenuItemData) {
+fun MenuItemCard(menuItem: MenuItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,7 +134,7 @@ fun MenuItemCard(menuItem: MenuItemData) {
                 modifier = Modifier.padding(8.dp)
             ) {
                 Text(
-                    text = menuItem.name,
+                    text = menuItem.itemName,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -153,4 +148,8 @@ fun MenuItemCard(menuItem: MenuItemData) {
     }
 }
 
-data class MenuItemData(val name: String, val imageUrl: Int, val price: Double)
+data class MenuItemData(
+    val name: String,
+    val imageUrl: Int,
+    val price: Double
+)
