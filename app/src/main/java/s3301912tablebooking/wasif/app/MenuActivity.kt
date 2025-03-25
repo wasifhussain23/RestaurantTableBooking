@@ -115,7 +115,7 @@ fun MenuItemCard(menuItem: MenuItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
+            .height(190.dp)
             .clip(RoundedCornerShape(12.dp)),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -123,6 +123,24 @@ fun MenuItemCard(menuItem: MenuItem) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            if(menuItem.offer!="0") {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                        color = Color.Green
+                    ),
+                    text ="${menuItem.offer}% OFF",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2
+                )
+
+            }
+
             Image(
                 modifier = Modifier
                     .size(100.dp),
@@ -131,15 +149,21 @@ fun MenuItemCard(menuItem: MenuItem) {
             )
 
             Column(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Text(
                     text = menuItem.itemName,
                     fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2
                 )
                 Text(
-                    text = "₹${menuItem.price}",
+                    text = "£ ${menuItem.price}",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )
@@ -148,8 +172,3 @@ fun MenuItemCard(menuItem: MenuItem) {
     }
 }
 
-data class MenuItemData(
-    val name: String,
-    val imageUrl: Int,
-    val price: Double
-)

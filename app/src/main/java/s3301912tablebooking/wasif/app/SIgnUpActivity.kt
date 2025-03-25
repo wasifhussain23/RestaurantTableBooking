@@ -297,7 +297,6 @@ fun registerTableBooking(restaurantData: RestaurantData, context: Context) {
 
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val databaseReference = firebaseDatabase.getReference("TableBookingDetails")
-
     databaseReference.child(restaurantData.emailId.replace(".", ","))
         .setValue(restaurantData)
         .addOnCompleteListener { task ->
@@ -306,7 +305,6 @@ fun registerTableBooking(restaurantData: RestaurantData, context: Context) {
                     .show()
                 context.startActivity(Intent(context, SignInActivity::class.java))
                 (context as Activity).finish()
-
             } else {
                 Toast.makeText(
                     context,

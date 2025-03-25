@@ -2,7 +2,6 @@ package s3301912tablebooking.wasif.app
 
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -34,9 +32,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -63,7 +60,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import s3301912tablebooking.wasif.app.SelectedRestaurant.restaurantData
 import java.util.Calendar
 
 
@@ -88,7 +84,6 @@ fun TableBookingScreen() {
     var guests by remember { mutableStateOf("") }
 
     var selectedDate by remember { mutableStateOf("") }
-    var selectedTime by remember { mutableStateOf("") }
 
     val timeSlots = listOf(
         "5 PM - 6 PM", "6 PM - 7 PM", "7 PM - 8 PM",
@@ -109,19 +104,10 @@ fun TableBookingScreen() {
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    // Time Picker
-    val timePickerDialog = TimePickerDialog(
-        context,
-        { _, hourOfDay, minute ->
-            selectedTime = String.format("%02d:%02d", hourOfDay, minute)
-        },
-        calendar.get(Calendar.HOUR_OF_DAY),
-        calendar.get(Calendar.MINUTE),
-        false
-    )
+    var bookingSuccessfullyDialog by remember { mutableStateOf(false) }
+
 
     //tables
-
     val rows = 5  // Number of rows in the restaurant layout
     val columns = 3  // Number of columns
     val totalTables = rows * columns
@@ -179,112 +165,6 @@ fun TableBookingScreen() {
         ) {
 
             Spacer(modifier = Modifier.height(16.dp))
-
-
-//            Card(
-//                modifier = Modifier.fillMaxWidth(),
-//                shape = RoundedCornerShape(12.dp),
-//                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-//                colors = CardDefaults.cardColors(containerColor = Color.White)
-//            ) {
-//
-//                Column(
-//                    modifier = Modifier.fillMaxWidth()
-//                ) {
-//                    Text(
-//                        modifier = Modifier.padding(start = 12.dp),
-//                        text = restaurantData.name, fontSize = 24.sp, fontWeight = FontWeight.Bold
-//                    )
-//                    Row(
-//                        modifier = Modifier.padding(horizontal = 8.dp),
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Image(
-//                            modifier = Modifier
-//                                .height(24.dp),
-//                            painter = painterResource(id = R.drawable.iv_special_dish),
-//                            contentDescription = "ThumbNail"
-//                        )
-//                        Spacer(modifier = Modifier.width(8.dp))
-//
-//                        Text(text = restaurantData.specials, fontSize = 18.sp)
-//
-////                        Spacer(modifier = Modifier.weight(1f))
-//
-//
-//                    }
-//
-//                    Row(
-//                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Image(
-//                            modifier = Modifier
-//                                .height(24.dp),
-//                            painter = painterResource(id = R.drawable.iv_location),
-//                            contentDescription = "ThumbNail"
-//                        )
-//                        Spacer(modifier = Modifier.width(8.dp))
-//
-//                        Text(text = restaurantData.address, fontSize = 16.sp)
-//
-//
-//                    }
-//
-//                    Row(
-//                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        Text(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .clickable {
-//                                    context.startActivity(Intent(context, MenuActivity::class.java))
-//
-//                                }
-//                                .background(
-//                                    color = colorResource(id = R.color.black),
-//                                    shape = RoundedCornerShape(6.dp)
-//                                )
-//                                .padding(horizontal = 6.dp, vertical = 4.dp),
-//                            text = "See Menu",
-//                            color = Color.White,
-//                            textAlign = TextAlign.Center,
-//                            fontSize = 16.sp
-//                        )
-//
-//                        Spacer(modifier = Modifier.width(12.dp))
-//
-//                        Text(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .clickable {
-//                                    context.startActivity(
-//                                        Intent(
-//                                            context,
-//                                            LocateRestaurantActivity::class.java
-//                                        )
-//                                    )
-//
-//                                }
-//                                .background(
-//                                    color = colorResource(id = R.color.firsthome_color),
-//                                    shape = RoundedCornerShape(6.dp)
-//                                )
-//                                .padding(horizontal = 6.dp, vertical = 4.dp),
-//                            text = "View Location",
-//                            textAlign = TextAlign.Center,
-//                            color = Color.White,
-//                            fontSize = 16.sp
-//                        )
-//                    }
-//
-//
-//                }
-//            }
-//
-//            Spacer(modifier = Modifier.height(8.dp))
-
 
             OutlinedTextField(
                 value = name,
@@ -365,7 +245,7 @@ fun TableBookingScreen() {
             Box(modifier = Modifier.weight(1f)) {
 
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(3), // 3 columns in each row
+                    columns = GridCells.Fixed(3),
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(horizontal = 12.dp),
@@ -404,8 +284,6 @@ fun TableBookingScreen() {
                     }
                 )
             }
-
-//                .weight(1f)
 
             Box(modifier = Modifier.weight(1f)) {
                 LazyColumn(
@@ -480,7 +358,7 @@ fun TableBookingScreen() {
                 onClick = {
                     if (name.isNotEmpty() && phone.isNotEmpty() && guests.isNotEmpty() && selectedDate.isNotEmpty() && selectedSlot!!.isNotEmpty()) {
 
-                        val customerMail = CustomerPreferences.fetchUserMail(context)
+                        val customerMail = CustomerPreferences.getCSMail(context)
 
                         saveTableBooking(
                             customerMail,
@@ -492,9 +370,8 @@ fun TableBookingScreen() {
                             selectedSlot!!,
                             selectedTables.toList()
                         )
+                        bookingSuccessfullyDialog = true
 
-                        Toast.makeText(context, "Table booked successfully!", Toast.LENGTH_LONG)
-                            .show()
                     } else {
                         Toast.makeText(
                             context,
@@ -506,6 +383,10 @@ fun TableBookingScreen() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Book Table")
+            }
+
+            if (bookingSuccessfullyDialog) {
+                BookingSuccessDialog(onDismiss = { bookingSuccessfullyDialog = false })
             }
 
         }
@@ -586,9 +467,7 @@ fun getBookedTables(
 ) {
     val database = FirebaseDatabase.getInstance().reference
     val bookingsRef = database.child("Bookings")
-
     val bookedTables = mutableListOf<Int>()
-
     bookingsRef.addListenerForSingleValueEvent(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             for (userSnapshot in snapshot.children) {
@@ -619,3 +498,42 @@ data class Booking(
     val time: String = "",
     val selectedTables: List<Int> = emptyList()
 )
+
+
+@Composable
+fun BookingSuccessDialog(onDismiss: () -> Unit) {
+
+    val context = LocalContext.current as Activity
+
+    AlertDialog(
+        onDismissRequest = {
+
+            context.startActivity(
+                Intent(
+                    context,
+                    BookingHomeActivity::class.java
+                ).apply {
+                    flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+            )
+        },
+        confirmButton = {
+            Button(onClick = {
+                context.startActivity(
+                    Intent(
+                        context,
+                        BookingHomeActivity::class.java
+                    ).apply {
+                        flags =
+                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                )
+            }) {
+                Text("OK")
+            }
+        },
+        title = { Text(text = "Success") },
+        text = { Text(text = "Table Reserved Successful!") }
+    )
+}

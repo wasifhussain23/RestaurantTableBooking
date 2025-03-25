@@ -3,6 +3,7 @@ package s3301912tablebooking.wasif.app
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -58,15 +59,12 @@ class MyBookingsActivity : ComponentActivity() {
 fun MyBookingsScreen() {
     val context = LocalContext.current as Activity
 
-    val userEmail = CustomerPreferences.fetchUserMail(context)
+    val userEmail = CustomerPreferences.getCSMail(context)
 
     var myBookings by remember { mutableStateOf(listOf<Booking>()) }
-    var isLoading by remember { mutableStateOf(true) }
-
     LaunchedEffect(userEmail) {
         getBookedTables(userEmail) { orders ->
             myBookings = orders
-            isLoading = false
         }
     }
 
@@ -114,12 +112,13 @@ fun MyBookingsScreen() {
                 .padding(horizontal = 12.dp)
         ) {
 
-            LazyColumn {
-                items(myBookings) { restaurant ->
-                    BookedRestaurantItem(restaurant)
-                    Spacer(modifier = Modifier.height(8.dp))
+                LazyColumn {
+                    items(myBookings) { restaurant ->
+                        BookedRestaurantItem(restaurant)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
-            }
+
         }
 
     }
@@ -129,10 +128,7 @@ fun MyBookingsScreen() {
 @Composable
 fun BookedRestaurantItem(restaurantData: Booking) {
 
-    val context = LocalContext.current as Activity
-
     val restaurantList = getRestaurants()
-
    val restaurant = restaurantList.find { it.restaurantId == restaurantData.restaurantId.toInt() }
 
     Card(
@@ -222,7 +218,6 @@ fun getBookedTables(customerMail: String, callback: (List<Booking>) -> Unit) {
                 val donation = donationSnapshot.getValue(Booking::class.java)
                 donation?.let { bookingsList.add(it) }
             }
-//            callback(bookingsList)
 
             Log.e("Test","Bookings Fetched - ${bookingsList.size}")
             callback(bookingsList)

@@ -5,35 +5,35 @@ import android.content.Context
 
 object CustomerPreferences {
 
-    fun persistLoginState(context: Context, value: Boolean) {
+    fun storeCS(context: Context, value: Boolean) {
         val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
         val editor = userLogin.edit()
-        editor.putBoolean("LOGIN_STATUS", value).apply()
+        editor.putBoolean("CUSTOMER_LOGIN_STATUS", value).apply()
     }
 
-    fun fetchLoginState(context: Context): Boolean {
+    fun getCS(context: Context): Boolean {
         val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
-        return userLogin.getBoolean("LOGIN_STATUS", false)
+        return userLogin.getBoolean("CUSTOMER_LOGIN_STATUS", false)
     }
 
-    fun persistUserName(context: Context, value: String) {
-        val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
-        val editor = userLogin.edit()
-        editor.putString("USERNAME", value).apply()
-    }
-
-    fun fetchUserName(context: Context): String {
-        val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
-        return userLogin.getString("USERNAME", "")!!
-    }
-
-    fun persistUserMail(context: Context, value: String) {
+    fun storeCSName(context: Context, value: String) {
         val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
         val editor = userLogin.edit()
-        editor.putString("USERMAIL", value).apply()
+        editor.putString("CUSTOMER_NAME", value).apply()
     }
 
-    fun fetchUserMail(context: Context): String {
+    fun getCSName(context: Context): String {
+        val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
+        return userLogin.getString("CUSTOMER_NAME", "")!!
+    }
+
+    fun storeCSMail(context: Context, value: String) {
+        val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
+        val editor = userLogin.edit()
+        editor.putString("CUSTOMER_MAIL", value).apply()
+    }
+
+    fun getCSMail(context: Context): String {
         val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
         return userLogin.getString("USERMAIL", "")!!
     }

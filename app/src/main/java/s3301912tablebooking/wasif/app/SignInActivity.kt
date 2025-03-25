@@ -39,7 +39,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
+import s3301912tablebooking.wasif.app.SelectedRestaurant.restaurantData
 
 class SignInActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -216,7 +219,7 @@ fun SignInScreen() {
         }
 
         Image(
-            painter = painterResource(id = R.drawable.wave_down), // Replace with your actual SVG drawable
+            painter = painterResource(id = R.drawable.wave_down),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxWidth()
@@ -231,28 +234,11 @@ fun SignInScreen() {
 
 fun signUpCustomer(restaurantData :RestaurantData, context: Context) {
 
-
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val databaseReference = firebaseDatabase.getReference("TableBookingDetails").child(restaurantData.emailId.replace(".", ","))
-
     databaseReference.get().addOnCompleteListener { task ->
         if (task.isSuccessful) {
-            val tableData = task.result?.getValue(RestaurantData::class.java)
-            if (tableData != null) {
-                if (tableData.password == restaurantData.password) {
-                    Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
-                    CustomerPreferences.persistLoginState(context, true)
-                    CustomerPreferences.persistUserMail(context, tableData.emailId)
-                    CustomerPreferences.persistUserName(context, tableData.userName)
-
-                    context.startActivity(Intent(context, BookingHomeActivity::class.java))
-                    (context as Activity).finish()
-                } else {
-                    Toast.makeText(context, "Seems Incorrect Credentials", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(context, "Your account not found", Toast.LENGTH_SHORT).show()
-            }
+            responseResult(context,task,restaurantData)
         } else {
             Toast.makeText(
                 context,
@@ -264,6 +250,25 @@ fun signUpCustomer(restaurantData :RestaurantData, context: Context) {
     }
 }
 
+fun responseResult(context: Context, task: Task<DataSnapshot>, restaurantData :RestaurantData)
+{
+    val tableData = task.result?.getValue(RestaurantData::class.java)
+    if (tableData != null) {
+        if (tableData.password == restaurantData.password) {
+            Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
+            CustomerPreferences.storeCS(context, true)
+            CustomerPreferences.storeCSMail(context, tableData.emailId)
+            CustomerPreferences.storeCSName(context, tableData.userName)
+
+            context.startActivity(Intent(context, BookingHomeActivity::class.java))
+            (context as Activity).finish()
+        } else {
+            Toast.makeText(context, "MisMatch in details", Toast.LENGTH_SHORT).show()
+        }
+    } else {
+        Toast.makeText(context, "Seems you are not registered", Toast.LENGTH_SHORT).show()
+    }
+}
 
 @Preview(showBackground = true)
 @Composable

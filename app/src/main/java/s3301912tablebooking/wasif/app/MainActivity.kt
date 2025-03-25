@@ -1,6 +1,5 @@
 package s3301912tablebooking.wasif.app
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,12 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -63,46 +57,14 @@ fun BookingLaunchCheck(onLoginClick: (studentStatus: Int) -> Unit) {
     SideEffect {
         CoroutineScope(Dispatchers.Main).launch {
             delay(3000)
-            onLoginClick(if (CustomerPreferences.fetchLoginState(context)) 1 else 2)
+            onLoginClick(if (CustomerPreferences.getCS(context)) 1 else 2)
         }
     }
 
     BookingLaunch()
 }
 
-@Composable
-fun BookingLaunchCheckOld()
-{
-    val context = LocalContext.current as Activity
-    var showSplash by remember { mutableStateOf(true) }
 
-    DisposableEffect(Unit) {
-        val job = CoroutineScope(Dispatchers.Main).launch {
-            delay(3000)
-            showSplash = false
-        }
-        onDispose { job.cancel() }
-    }
-
-    if (showSplash) {
-        BookingLaunch()
-
-    } else {
-
-        val loginStatus = CustomerPreferences.fetchLoginState(context)
-
-        if(loginStatus)
-        {
-            context.startActivity(Intent(context, BookingHomeActivity::class.java))
-            context.finish()
-        }else{
-            context.startActivity(Intent(context, SignInActivity::class.java))
-            context.finish()
-        }
-
-    }
-
-}
 
 @Composable
 fun BookingLaunch() {

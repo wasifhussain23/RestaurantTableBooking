@@ -211,7 +211,6 @@ fun RestaurantDetailsScreen() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp)
-                            .padding(vertical = 6.dp)
                             .clickable {
                                 context.startActivity(
                                     Intent(
@@ -229,8 +228,11 @@ fun RestaurantDetailsScreen() {
                         text = "Click Here To Book",
                         textAlign = TextAlign.Center,
                         color = Color.White,
-                        fontSize = 18.sp
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
                     )
+
+                    Spacer(modifier = Modifier.height(64.dp))
 
 
                 }
