@@ -35,6 +35,6 @@ object CustomerPreferences {
 
     fun getCSMail(context: Context): String {
         val userLogin = context.getSharedPreferences("TABLE_BOOKING_DATA", Context.MODE_PRIVATE)
-        return userLogin.getString("USERMAIL", "")!!
+        return userLogin.getString("CUSTOMER_MAIL", "")!!
     }
 }
